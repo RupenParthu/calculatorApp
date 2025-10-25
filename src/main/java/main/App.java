@@ -13,11 +13,13 @@ public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/main/calc.fxml")); // Your FXML file
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/calc.fxml"));
+        Parent root = loader.load();
+        Controller controller = loader.getController();
+        controller.onStartAnimation();
         Scene scene = new Scene(root);
         primaryStage.setTitle("GUICalculator");
         primaryStage.setScene(scene);
-        primaryStage.setResizable(false); // optional: fix window size
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/main/icon/icon1.png")));
         primaryStage.show();
     }

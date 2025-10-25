@@ -10,163 +10,168 @@ public class Controller {
     @FXML
     private Label display;
 
-    private StringBuilder fullDis = new StringBuilder("0");
-    private String operator = "";
-    private double result = 0;
-    private boolean startNewInput = true;
-    private boolean lastInputWasOperator = false;
-    private boolean lastInputWasEquals = false;
+    private StringBuilder fullDis = new StringBuilder();
+    private String currInput = "";
+    private String op = "";
+    private double res = 0;
+    private boolean waitingForNextNumber = false;
 
     @FXML
-    private void initialize() {
-        display.setText(fullDis.toString());
+    public void onStartAnimation() {
+        String name = "MADE BY RUPEN";
+        fullDis.setLength(0);
+        display.setText("");
+
+        javafx.animation.Timeline timeline = new javafx.animation.Timeline();
+        int delay = 200;
+
+        for (int i = 0; i < name.length(); i++) {
+            final int index = i;
+            javafx.animation.KeyFrame kf = new javafx.animation.KeyFrame(
+                    javafx.util.Duration.millis(delay * (i + 1)),
+                    e -> {
+                        fullDis.append(name.charAt(index));
+                        display.setText(fullDis.toString());
+                    }
+            );
+            timeline.getKeyFrames().add(kf);
+        }
+
+        javafx.animation.KeyFrame resetFrame = new javafx.animation.KeyFrame(
+                javafx.util.Duration.millis(delay * (name.length() + 1)),
+                e -> {
+                    fullDis.setLength(0);
+                    fullDis.append("0");
+                    display.setText("0");
+                    waitingForNextNumber = false;
+                }
+        );
+        timeline.getKeyFrames().add(resetFrame);
+
+        timeline.play();
     }
 
     @FXML
     private void onDigitClick(ActionEvent event) {
         String value = ((Button) event.getSource()).getText();
 
-        if (lastInputWasEquals) {
-            // After equals, start fresh
-            fullDis.setLength(0);
-            operator = "";
-            result = 0;
-            lastInputWasEquals = false;
-            startNewInput = true;
-        }
-
-        if (startNewInput) {
-            if (lastInputWasOperator) {
-                // Append to existing expression (e.g., "9 + " becomes "9 + 9")
-                fullDis.append(value);
-            } else {
-                // Start new number
-                fullDis.setLength(0);
-                fullDis.append(value);
-            }
-            startNewInput = false;
+        if (waitingForNextNumber) {
+            currInput = value;
+            fullDis.append(value);
+            waitingForNextNumber = false;
         } else {
-            // Append digit to current number
+            if (currInput.equals("0")) currInput = "";
+            currInput += value;
+
+            if (fullDis.toString().equals("0")) fullDis.setLength(0);
             fullDis.append(value);
         }
 
         display.setText(fullDis.toString());
-        lastInputWasOperator = false;
     }
 
     @FXML
     private void onDotClick(ActionEvent event) {
-        if (lastInputWasEquals) {
-            fullDis.setLength(0);
-            fullDis.append("0.");
-            operator = "";
-            result = 0;
-            lastInputWasEquals = false;
-            startNewInput = false;
-            display.setText(fullDis.toString());
-            return;
-        }
-
-        // Check if current number already has a decimal point
-        String currentNumber = getCurrentNumber();
-        if (!currentNumber.contains(".")) {
-            if (startNewInput) {
-                if (lastInputWasOperator) {
-                    // Append to expression (e.g., "9 + " becomes "9 + 0.")
-                    fullDis.append("0.");
-                } else {
-                    // Start new number
+        if (!currInput.contains(".")) {
+            if (currInput.isEmpty() || waitingForNextNumber) {
+                currInput = "0.";
+                if (fullDis.toString().equals("0") || waitingForNextNumber) {
                     fullDis.setLength(0);
-                    fullDis.append("0.");
                 }
-                startNewInput = false;
+                fullDis.append(currInput);
+                waitingForNextNumber = false;
             } else {
+                currInput += ".";
                 fullDis.append(".");
             }
         }
-
         display.setText(fullDis.toString());
-        lastInputWasOperator = false;
     }
 
     @FXML
     private void onOperatorClick(ActionEvent event) {
         String newOperator = ((Button) event.getSource()).getText();
 
-        if (lastInputWasEquals) {
-            // Continue from result
-            fullDis.setLength(0);
-            fullDis.append(removeTrailingZeros(result)).append(" ").append(newOperator).append(" ");
-            operator = newOperator;
-            lastInputWasEquals = false;
-            startNewInput = true;
-            lastInputWasOperator = true;
-            display.setText(fullDis.toString());
-            return;
-        }
-
-        if (lastInputWasOperator) {
-            // Replace previous operator
-            fullDis.setLength(fullDis.length() - 3); // Remove " [op] "
-            fullDis.append(" ").append(newOperator).append(" ");
-            operator = newOperator;
-            display.setText(fullDis.toString());
-            return;
-        }
-
-        if (!fullDis.toString().equals("0")) {
-            if (!operator.isEmpty()) {
-                // Compute intermediate result
+        if (!currInput.isEmpty()) {
+            if (!op.isEmpty()) {
                 calculate();
-                fullDis.setLength(0);
-                fullDis.append(removeTrailingZeros(result)).append(" ").append(newOperator).append(" ");
             } else {
-                // Store first number as result
-                result = Double.parseDouble(getCurrentNumber());
-                fullDis.append(" ").append(newOperator).append(" ");
+                res = Double.parseDouble(currInput);
             }
         }
 
-        operator = newOperator;
-        startNewInput = true;
-        lastInputWasOperator = true;
+        if (waitingForNextNumber && !op.isEmpty()) {
+            fullDis.setLength(fullDis.length() - 3);
+            fullDis.append(" ").append(newOperator).append(" ");
+        } else {
+            fullDis.append(" ").append(newOperator).append(" ");
+        }
+
+        op = newOperator;
+        waitingForNextNumber = true;
+        currInput = "";
         display.setText(fullDis.toString());
     }
 
     @FXML
     private void onEqualsClick(ActionEvent event) {
-        if (!operator.isEmpty() && !lastInputWasOperator) {
+        if (!op.isEmpty() && !currInput.isEmpty()) {
             calculate();
             fullDis.setLength(0);
-            fullDis.append(removeTrailingZeros(result));
+            fullDis.append(formatResult(res));
             display.setText(fullDis.toString());
-            operator = "";
-            lastInputWasEquals = true;
-            startNewInput = true;
+
+            op = "";
+            waitingForNextNumber = true;
+            currInput = "";
         }
     }
 
-    private void calculate() {
-        String[] parts = fullDis.toString().split(" ");
-        double secondOperand = Double.parseDouble(parts[parts.length - 1]);
-        double calcResult = 0;
+    @FXML
+    private void onClearClick(ActionEvent event) {
+        currInput = "";
+        op = "";
+        res = 0;
+        fullDis.setLength(0);
+        fullDis.append("0");
+        display.setText("0");
+        waitingForNextNumber = false;
+    }
 
-        switch (operator) {
+    @FXML
+    private void onClearEntryClick(ActionEvent event) {
+        if (!currInput.isEmpty()) {
+            int len = currInput.length();
+            int sbLen = fullDis.length();
+            fullDis.delete(sbLen - len, sbLen);
+            currInput = "";
+        }
+
+        if (fullDis.length() == 0) {
+            fullDis.append("0");
+        }
+
+        display.setText(fullDis.toString());
+        waitingForNextNumber = true;
+    }
+
+    private void calculate() {
+        double secondOperand = currInput.isEmpty() ? res : Double.parseDouble(currInput);
+        double result = 0;
+
+        switch (op) {
             case "+":
-                calcResult = result + secondOperand;
+                result = this.res + secondOperand;
                 break;
             case "-":
-                calcResult = result - secondOperand;
+                result = this.res - secondOperand;
                 break;
             case "*":
-                calcResult = result * secondOperand;
+                result = this.res * secondOperand;
                 break;
             case "/":
-                if (secondOperand != 0) {
-                    calcResult = result / secondOperand;
-                } else {
-                    fullDis.setLength(0);
-                    fullDis.append("Error");
+                if (secondOperand != 0) result = this.res / secondOperand;
+                else {
                     display.setText("Error");
                     onClearClick(null);
                     return;
@@ -174,57 +179,12 @@ public class Controller {
                 break;
         }
 
-        result = calcResult;
+        this.res = result;
     }
 
-    private String removeTrailingZeros(double value) {
-        if (value == (long) value) return String.format("%d", (long) value);
-        else return String.valueOf(Math.round(value * 10000000000.0) / 10000000000.0);
-    }
-
-    @FXML
-    private void onClearClick(ActionEvent event) {
-        fullDis.setLength(0);
-        fullDis.append("0");
-        operator = "";
-        result = 0;
-        startNewInput = true;
-        lastInputWasOperator = false;
-        lastInputWasEquals = false;
-        display.setText("0");
-    }
-
-    @FXML
-    private void onClearEntryClick(ActionEvent event) {
-        if (lastInputWasEquals) {
-            // Casio CE after result = show 0, not full reset
-            fullDis.setLength(0);
-            fullDis.append("0");
-            display.setText("0");
-            return;
-        }
-
-        if (!lastInputWasOperator && !fullDis.toString().equals("0")) {
-            // Remove the current number
-            String[] parts = fullDis.toString().split(" ");
-            if (parts.length > 1) {
-                // Expression like "9 + 5" -> remove "5"
-                fullDis.setLength(0);
-                fullDis.append(parts[0]).append(" ").append(operator).append(" ");
-            } else {
-                // Single number, reset to "0"
-                fullDis.setLength(0);
-                fullDis.append("0");
-            }
-        }
-
-        startNewInput = true;
-        display.setText(fullDis.toString());
-    }
-
-    // Helper method to get the current number from fullDis
-    private String getCurrentNumber() {
-        String[] parts = fullDis.toString().split(" ");
-        return parts[parts.length - 1];
+    private String formatResult(double value) {
+        return new java.math.BigDecimal(String.valueOf(value))
+                .stripTrailingZeros()
+                .toPlainString();
     }
 }
