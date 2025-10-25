@@ -10,4 +10,6 @@ A basic calculator application built using Java and the JavaFX framework. It per
 
 ## 📸 Screenshots
 
-[//]: # ([Standard Calculator View]&#40;assets/standard_view.png&#41;)
+![Calculator View 1](assets/1.png)
+
+![Calculator View 2](assets/2.png)
