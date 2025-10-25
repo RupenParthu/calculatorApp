@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="603.0" prefWidth="360.0" style="-fx-background-color: #2C2C2C;" stylesheets="@style.css" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.Controller">
+    <children>
+        <!-- Display -->
+        <VBox layoutX="10.0" layoutY="18.0" prefHeight="107.0" prefWidth="341.0">
+            <children>
+                <Label fx:id="display" alignment="BOTTOM_RIGHT" prefHeight="113.0" prefWidth="339.0" style="-fx-background-color: #9CA56F; -fx-background-radius: 9; -fx-padding: 20;" text="0" textAlignment="RIGHT">
+                    <font>
+                        <Font size="40.0" />
+                    </font>
+                </Label>
+            </children>
+        </VBox>
+
+        <!-- Button Grid -->
+        <VBox layoutX="9.0" layoutY="141.0" prefHeight="451.0" prefWidth="341.0">
+            <children>
+                <GridPane hgap="10" prefHeight="472.0" prefWidth="333.0" vgap="10">
+
+                    <!-- Column constraints: 4 equal columns -->
+                    <columnConstraints>
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="25" />
+                        <ColumnConstraints percentWidth="25" />
+                    </columnConstraints>
+
+                    <!-- Row constraints: 5 equal rows -->
+                    <rowConstraints>
+                        <RowConstraints percentHeight="20" />
+                        <RowConstraints percentHeight="20" />
+                        <RowConstraints percentHeight="20" />
+                        <RowConstraints percentHeight="20" />
+                        <RowConstraints percentHeight="20" />
+                    </rowConstraints>
+
+                    <children>
+                        <!-- First Row -->
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onClearClick" style="-fx-background-color: #CA0200; -fx-background-radius: 9;" text="C" textFill="WHITE">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onClearEntryClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="CE" textFill="WHITE" GridPane.columnIndex="1">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onOperatorClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="/" textFill="WHITE" GridPane.columnIndex="2">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onOperatorClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="*" textFill="WHITE" GridPane.columnIndex="3">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+
+                        <!-- Second Row -->
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="7" textFill="WHITE" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="8" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="9" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onOperatorClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="+" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="1">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+
+                        <!-- Third Row -->
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="4" textFill="WHITE" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="5" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="6" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onOperatorClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="-" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="2">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+
+                        <!-- Fourth Row -->
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="1" textFill="WHITE" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="2" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="3" textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="3">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <!-- Equals button spans two rows -->
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onEqualsClick" style="-fx-background-radius: 9; -fx-background-color: #3D89CF;" text="=" textFill="WHITE" GridPane.columnIndex="3" GridPane.rowIndex="3" GridPane.rowSpan="2">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+
+                        <!-- Fifth Row -->
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="0" textFill="WHITE" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDigitClick" style="-fx-background-radius: 9; -fx-background-color: #363636;" text="00" textFill="WHITE" GridPane.columnIndex="1" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+                        <Button maxHeight="Infinity" maxWidth="Infinity" onAction="#onDotClick" style="-fx-background-radius: 9; -fx-background-color: #242424;" text="." textFill="WHITE" GridPane.columnIndex="2" GridPane.rowIndex="4">
+                     <font>
+                        <Font size="30.0" />
+                     </font></Button>
+
+                    </children>
+                </GridPane>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
