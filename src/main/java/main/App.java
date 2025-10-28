@@ -7,13 +7,11 @@ import javafx.stage.Stage;
 import javafx.scene.Parent;
 import javafx.scene.image.Image;
 
-import java.util.Objects;
-
 public class App extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/calc.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/main/calculator_ui.fxml"));
         Parent root = loader.load();
         Controller controller = loader.getController();
         controller.onStartAnimation();

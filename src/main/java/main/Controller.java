@@ -18,7 +18,7 @@ public class Controller {
 
     @FXML
     public void onStartAnimation() {
-        String name = "MADE BY RUPEN";
+        String name = "JAVAFX CALC";
         fullDis.setLength(0);
         display.setText("");
 
